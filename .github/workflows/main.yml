@@ -1,4 +1,5 @@
 name: Application CI
+
 on: [push, pull_request]
 jobs:
   pipeline:
@@ -49,3 +50,11 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       - name: 'E2E: Teardown'
         run: npm run ci:e2e:teardown
+      - name: uploadReports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ github.run_number }}
+          path: |
+            target/surefire-reports/*.xml
+            target/test-results/jest/*.xml
+            target/jacoco/*
